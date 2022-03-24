@@ -1,4 +1,55 @@
 
+<?php
+
+include "inc/conf.php";
+$msg = "";
+if(isLoged()){
+    header("Location: index.html");
+}
+if(isset($_POST['submit'])){
+
+    $username = $_POST['cname'];
+    $password = $_POST['password'];
+
+    if(empty($password) || empty($username)){
+        $msg = '<div class="alert alert-danger" role="alert">
+                Input must be not empty
+             </div>';
+
+    }else{
+
+        $stm = $conn->prepare(" select * from students where name = '$username' ");
+        $stm->execute();
+        $count = $stm->rowCount();
+
+        if ($count != 0){
+
+            $row = $stm->fetch();
+
+            if($row['password'] === $password){
+
+                $_SESSION['user:id'] = $row['id'];
+                header("Location: index.html");
+                exit();
+            }else{
+                $msg = '<div class="alert alert-danger" role="alert">
+                Username or passowrd is not correct.
+             </div>';
+            }
+
+        }else{
+
+            $msg = '<div class="alert alert-danger" role="alert">
+            Username or passowrd is not correct.
+             </div>';
+
+        }
+
+    }
+
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -154,9 +205,10 @@
 <div class="row">
 <div class="col-md-12">
 <div class="checkout-form">
-<form>
-
+<form method="POST" action=""> 
+<?=$msg?>
 <div class="row">
+
 
 
 <div class="col-md-12">
@@ -167,14 +219,14 @@
 </div>
 <div class="col-md-12">
 <div class="wepaint-input-group">
-<label for="cntryname">Password<span>*</span></label>
-<input type="text" name="cntryname" id="cntryname" class="wi-control">
+<label for="cntryname">Password</label>
+<input type="password" name="password" id="cntryname" class="wi-control">
 </div>
 </div>
 
 </div>
 
-<input type="submit" value="Login" style="font-size: large;" class="btn btn-primary">
+<input type="submit" value="Login" style="font-size: large;" name="submit" class="btn btn-primary">
 
 </form>
 </div>

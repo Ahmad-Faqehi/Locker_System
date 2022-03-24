@@ -2,15 +2,18 @@
 include "inc/conf.php";
 $sql = "SELECT * FROM `lockers`";
 $lockers = $conn->query($sql)->fetchAll();
+$has_req = false;
+$new_req = false;
 
 $msg = "";
 if(isset($_POST['submit'])){
 
     $user_id = $_POST['userid'];
     $locker_id = $_POST['locker_id'];
+    $time = time();
 
     //Todo: insert the new locker to bocking table
-    $stmt = $conn->prepare("INSERT INTO `booking`(`student_id`, `locker_id`) VALUES ($user_id,$locker_id)");
+    $stmt = $conn->prepare("INSERT INTO `booking`(`student_id`, `locker_id`, `time_on`) VALUES ($user_id,$locker_id,'$time')");
     $executed = $stmt->execute();
     
     //Todo: Update the status of locker from availbe to peding
@@ -18,12 +21,23 @@ if(isset($_POST['submit'])){
     $executed_update = $stmt_update->execute();
 
     if($executed && $executed_update){
+      $new_req = true;
       $msg = '<div class="alert alert-success" role="alert">
       Your request has been send successfuly.
     </div>';
     }
 
 }
+
+// TOdo : Chcek if user already has requset to reasve locker
+if(isLoged()):
+  $userid = $_SESSION['user:id'];
+  $sql_chcek = "SELECT * FROM `booking` WHERE student_id = $userid";
+  $result = $conn->query($sql_chcek)->fetchAll();
+  if(!empty($result)){
+    $has_req = true;
+  }
+endif;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -172,11 +186,13 @@ if(isset($_POST['submit'])){
 </ul>
 </nav>
 </div>
+<?php if(!isLoged()): ?>
 <div class="col-md-4">
 <div class="qnRight">
-<a href="contact.html" class="btn-style-a">Contact US</a>
+<a href="login.php" class="btn-style-a">Login</a>
 </div>
 </div>
+<?php endif ?>
 </div>
 </div>
 </header>
@@ -237,6 +253,15 @@ if(isset($_POST['submit'])){
   You have be login to reserve locker
 </div>
 <?php endif ?>
+
+<?php if($has_req && !$new_req): ?>
+
+<div class="alert alert-danger" role="alert">
+You already has request for reasve locker. See you requstes <a href="request.php" class=""> Here</a>.
+</div>
+
+<?php else: ?>
+
 <div class="row">
 
 <?php foreach($lockers as $locker): 
@@ -250,6 +275,7 @@ if(isset($_POST['submit'])){
         $isReserved = false;
     }
     ?>
+
 
 <div class="col-md-4">
 <div class="single-blogV2">
@@ -272,6 +298,7 @@ if(isset($_POST['submit'])){
 </div>
 <?php endforeach ?>
 
+<?php endif ?>
 
 </div>
 

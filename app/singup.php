@@ -142,11 +142,13 @@ if(isset($_POST['submit'])){
 </ul>
 </nav>
 </div>
+<?php if(!isLoged()): ?>
 <div class="col-md-4">
 <div class="qnRight">
-<a href="contact.html" class="btn-style-a">Contact US</a>
+<a href="login.php" class="btn-style-a">Login</a>
 </div>
 </div>
+<?php endif ?>
 </div>
 </div>
 </header>
