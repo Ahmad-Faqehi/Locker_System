@@ -1,3 +1,56 @@
+<?php 
+include "../inc/conf.php";
+$msg = "";
+if(isset($_POST['submit'])){
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $as = $_POST['as'];
+
+
+    if(empty($password) || empty($username)){
+        $msg = '<div class="alert alert-danger" role="alert">
+                Input must be not empty
+             </div>';
+
+    }else{
+
+        if($as == "Administrative"){
+            //
+            $stm = $conn->prepare(" select * from Administrative where username = '$username' ");
+        }else{
+            $stm = $conn->prepare(" select * from Administrator where username = '$username' ");
+        }
+
+        
+        $stm->execute();
+        $count = $stm->rowCount();
+
+        if ($count != 0){
+
+            $row = $stm->fetch();
+
+            if($row['password'] === $password){
+
+                $_SESSION['admin:id'] = $row['id'];
+                header("Location: index.php");
+                exit();
+            }else{
+                $msg = '<div class="alert alert-danger" role="alert">
+                Username or passowrd is not correct.
+             </div>';
+            }
+
+        }else{
+
+            $msg = '<div class="alert alert-danger" role="alert">
+            Username or passowrd is not correct.
+             </div>';
+
+        }
+
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -34,36 +87,35 @@
                 <div class="card o-hidden border-0 shadow-lg my-5">
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
+                        
                         <div class="row">
+                      
                             <!-- <div class="col-lg-6 d-none d-lg-block bg-login-image"></div> -->
                             <div class="col-lg-12">
                                 <div class="p-5">
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                                     </div>
-                                    <form class="user">
+                                    <?=$msg?>
+                                    <form class="user" method="POST" action="">
                                         <div class="form-group">
-                                            <label for="Email">Email</label>
-                                            <input type="email" class="form-control form-control-user"
-                                                id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="Enter Email Address...">
+                                            <label for="Email">Username</label>
+                                            <input type="text" class="form-control form-control-user"
+                                                id="exampleInputEmail" aria-describedby="emailHelp" name="username">
                                         </div>
                                         <div class="form-group">
                                             <label for="Password">Password</label>
-                                            <input type="password" class="form-control form-control-user"
-                                                id="exampleInputPassword" placeholder="Password">
+                                            <input type="password" class="form-control form-control-user" id="exampleInputPassword" name="password">
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleFormControlSelect2">Login As</label>
-                                            <select  class="form-control" id="exampleFormControlSelect2">
-                                              <option>Admin</option>
-                                              <option>Employee</option>
+                                            <select  class="form-control" id="exampleFormControlSelect2" name="as">
+                                              <option value="Administrative">Administrative</option>
+                                              <option value="Administrator">Administrator</option>
                                             </select>
                                           </div>
  
-                                        <a href="index.html" class="btn btn-primary btn-user btn-block">
-                                            Login
-                                        </a>
+                                       <input type="submit" class="btn btn-primary btn-user btn-block" name="submit" value="login">
 
                                     </form>
                                 </div>
