@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.4
+-- version 5.1.3
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Mar 23, 2022 at 05:23 AM
--- Server version: 10.1.37-MariaDB
--- PHP Version: 7.3.1
+-- Host: database
+-- Generation Time: Mar 31, 2022 at 11:40 AM
+-- Server version: 5.7.37
+-- PHP Version: 8.0.15
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -19,8 +18,43 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `lockers`
+-- Database: `locker`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Administrative`
+--
+
+CREATE TABLE `Administrative` (
+  `id` int(11) NOT NULL,
+  `name` varchar(225) NOT NULL,
+  `phone_number` varchar(25) NOT NULL,
+  `username` varchar(225) NOT NULL,
+  `password` varchar(225) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Administrator`
+--
+
+CREATE TABLE `Administrator` (
+  `id` int(11) NOT NULL,
+  `name` varchar(25) NOT NULL,
+  `username` varchar(25) NOT NULL,
+  `phone_number` varchar(25) NOT NULL,
+  `password` varchar(225) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `Administrator`
+--
+
+INSERT INTO `Administrator` (`id`, `name`, `username`, `phone_number`, `password`) VALUES
+(1, 'test', 'test', '05787545', '123123');
 
 -- --------------------------------------------------------
 
@@ -98,6 +132,18 @@ INSERT INTO `students` (`id`, `name`, `phone_number`, `username`, `password`) VA
 --
 
 --
+-- Indexes for table `Administrative`
+--
+ALTER TABLE `Administrative`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `Administrator`
+--
+ALTER TABLE `Administrator`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `booking`
 --
 ALTER TABLE `booking`
@@ -118,6 +164,18 @@ ALTER TABLE `students`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `Administrative`
+--
+ALTER TABLE `Administrative`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `Administrator`
+--
+ALTER TABLE `Administrator`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `booking`
