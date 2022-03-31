@@ -1,4 +1,5 @@
 <?php 
+// hello
 include "inc/conf.php";
 $sql = "SELECT * FROM `lockers`";
 $lockers = $conn->query($sql)->fetchAll();
