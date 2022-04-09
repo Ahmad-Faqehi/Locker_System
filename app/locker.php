@@ -333,16 +333,16 @@ $user = $conn->query($sql)->fetch();
       <form method="POST" action="">
   <div class="form-group">
     <label for="exampleInputEmail1">Your Name</label>
-    <input type="email" class="form-control" id="exampleInputEmail1"  value="<?=$user['name']?>" readonly >
+    <input type="email" class="form-control" id="exampleInputEmail1" style="font-size: medium;"  value="<?=$user['name']?>" readonly >
     <input type="hidden" name="userid"  value="<?=$user['id']?>"  >
   </div>
   <div class="form-group">
     <label for="exampleInputPassword1">Your Phone Number</label>
-    <input type="number" class="form-control" id="exampleInputPassword1" value="<?=$user['phone_number']?>" readonly >
+    <input type="number" class="form-control" id="exampleInputPassword1" style="font-size: medium;" value="<?=$user['phone_number']?>" readonly >
   </div>
   <div class="form-group">
     <label for="exampleInputPassword1">Locker Number</label>
-    <input type="number" class="form-control" name="locker_id" value="<?=$locker_id ?>" readonly >
+    <input type="number" class="form-control" name="locker_id" style="font-size: medium;" value="<?=$locker_id ?>" readonly >
   </div>
 
       </div>

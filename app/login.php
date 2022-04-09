@@ -18,7 +18,7 @@ if(isset($_POST['submit'])){
 
     }else{
 
-        $stm = $conn->prepare(" select * from students where name = '$username' ");
+        $stm = $conn->prepare(" select * from students where username = '$username' ");
         $stm->execute();
         $count = $stm->rowCount();
 
@@ -152,11 +152,7 @@ if(isset($_POST['submit'])){
 </ul>
 </nav>
 </div>
-<div class="col-md-4">
-<div class="qnRight">
-<a href="contact.html" class="btn-style-a">Contact US</a>
-</div>
-</div>
+
 </div>
 </div>
 </header>
@@ -229,6 +225,10 @@ if(isset($_POST['submit'])){
 <input type="submit" value="Login" style="font-size: large;" name="submit" class="btn btn-primary">
 
 </form>
+</div>
+<br>
+<div class="text-left">
+    <a href="singup.php" class="text-link" style="font-size: initial;">Create new account</a>
 </div>
 </div>
 </div>
