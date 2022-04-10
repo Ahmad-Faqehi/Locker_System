@@ -10,7 +10,7 @@ if(!isset($_SESSION['admin:id'])){
 $lockers = $conn->query("SELECT * FROM `lockers`")->fetchAll();
 $booking = $conn->query("SELECT * FROM `booking`")->fetchAll();
 $students = $conn->query("SELECT * FROM `students`")->fetchAll();
-$pendig = $conn->query("SELECT * FROM `booking` where approved IS NULL")->fetchAll();
+$pendig = $conn->query("SELECT * FROM `booking` where approved = 'Pending'")->fetchAll();
 
 ?>
 <!DOCTYPE html>
