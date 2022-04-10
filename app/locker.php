@@ -1,8 +1,7 @@
 <?php 
 // hello
 include "inc/conf.php";
-$sql = "SELECT * FROM `lockers`";
-$lockers = $conn->query($sql)->fetchAll();
+
 $has_req = false;
 $new_req = false;
 
@@ -24,7 +23,7 @@ if(isset($_POST['submit'])){
     if($executed && $executed_update){
       $new_req = true;
       $msg = '<div class="alert alert-success" role="alert">
-      Your request has been send successfuly.
+      Your request has been send successfuly. To see details <a href = "request.php">Click Here</a>
     </div>';
     }
 
@@ -39,6 +38,9 @@ if(isLoged()):
     $has_req = true;
   }
 endif;
+
+$sql = "SELECT * FROM `lockers`";
+$lockers = $conn->query($sql)->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="en">

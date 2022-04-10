@@ -228,7 +228,7 @@ if(isset($_POST['submit'])){
 </div>
 <br>
 <div class="text-left">
-    <a href="singup.php" class="text-link" style="font-size: initial;">Create new account</a>
+    <a href="singup.php" class="text-info" style="font-size: initial;">Create new account</a>
 </div>
 </div>
 </div>

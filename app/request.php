@@ -20,7 +20,12 @@ if(empty($lockers)){
   $has_req = false;
 }
 
+if($lockers['approved'] == 'Approve'){
 
+  $emp_id = $lockers['employee_id'];
+  $employee_sql = "SELECT * FROM `administrative` WHERE id = $emp_id";
+  $employee = $conn->query($employee_sql)->fetch();
+}
 
 ?>
 <!DOCTYPE html>
@@ -236,7 +241,7 @@ if(empty($lockers)){
 
 <?php if($has_req):
     
-    if($lockers['approved']){
+    if($lockers['approved'] == "Approve"){
         $lable = "Approved";
         $class = "text-success";
     }else{
@@ -263,7 +268,35 @@ if(empty($lockers)){
     </tr>
   </tbody>
 </table>
-<?php endif; ?>
+<?php endif; 
+if($lable == "Approved"): ?>
+
+<div class="row">
+<div class="col-md-12">
+<div class="product-info-tab" style="padding: 14px 0px;">
+<nav>
+<div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+<a class="nav-item nav-link active show" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Employee Details</a>
+</div>
+</nav>
+<div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
+<div class="tab-pane fade active show" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+
+<p>
+  The employee who accept your request is: 
+  <br>
+  <br>
+  Name: <b><?=$employee['name']?></b> <br>
+  Phone Number: <a href="tel:<?=$employee['phone_number']?>"> <b><?=$employee['phone_number']?></b> </a>
+</p>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<?php endif ?>
 
 </div>
 

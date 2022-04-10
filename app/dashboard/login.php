@@ -31,6 +31,7 @@ if(isset($_POST['submit'])){
 
             if($row['password'] === $password){
 
+                $_SESSION['as'] = $as;
                 $_SESSION['admin:id'] = $row['id'];
                 header("Location: index.php");
                 exit();
