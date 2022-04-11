@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.3
+-- version 4.8.4
 -- https://www.phpmyadmin.net/
 --
--- Host: database
--- Generation Time: Mar 31, 2022 at 11:40 AM
--- Server version: 5.7.37
--- PHP Version: 8.0.15
+-- Host: 127.0.0.1
+-- Generation Time: Apr 11, 2022 at 07:03 PM
+-- Server version: 10.1.37-MariaDB
+-- PHP Version: 7.3.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -18,16 +19,16 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `locker`
+-- Database: `lockers`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `Administrative`
+-- Table structure for table `administrative`
 --
 
-CREATE TABLE `Administrative` (
+CREATE TABLE `administrative` (
   `id` int(11) NOT NULL,
   `name` varchar(225) NOT NULL,
   `phone_number` varchar(25) NOT NULL,
@@ -35,13 +36,20 @@ CREATE TABLE `Administrative` (
   `password` varchar(225) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `administrative`
+--
+
+INSERT INTO `administrative` (`id`, `name`, `phone_number`, `username`, `password`) VALUES
+(1, 'johan', '059856488', 'Ismael', '112233');
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `Administrator`
+-- Table structure for table `administrator`
 --
 
-CREATE TABLE `Administrator` (
+CREATE TABLE `administrator` (
   `id` int(11) NOT NULL,
   `name` varchar(25) NOT NULL,
   `username` varchar(25) NOT NULL,
@@ -50,11 +58,12 @@ CREATE TABLE `Administrator` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `Administrator`
+-- Dumping data for table `administrator`
 --
 
-INSERT INTO `Administrator` (`id`, `name`, `username`, `phone_number`, `password`) VALUES
-(1, 'test', 'test', '05787545', '123123');
+INSERT INTO `administrator` (`id`, `name`, `username`, `phone_number`, `password`) VALUES
+(1, 'test', 'test', '05787545', '123123'),
+(2, 'Khaled', 'Rtt4', '0556874', '885522');
 
 -- --------------------------------------------------------
 
@@ -66,8 +75,19 @@ CREATE TABLE `booking` (
   `id` int(11) NOT NULL,
   `student_id` int(11) NOT NULL,
   `locker_id` int(11) NOT NULL,
-  `employee_id` int(11) DEFAULT NULL
+  `employee_id` int(11) DEFAULT NULL,
+  `approved` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT 'Pending',
+  `time_on` int(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `booking`
+--
+
+INSERT INTO `booking` (`id`, `student_id`, `locker_id`, `employee_id`, `approved`, `time_on`) VALUES
+(3, 2, 6, NULL, 'Approve', 1648062240),
+(6, 5, 20, 1, 'Approve', 1649549530),
+(8, 6, 8, 1, 'Approve', 1649552944);
 
 -- --------------------------------------------------------
 
@@ -90,21 +110,23 @@ INSERT INTO `lockers` (`id`, `status`) VALUES
 (3, 1),
 (4, 1),
 (5, 1),
-(6, 1),
-(7, 2),
-(8, 1),
+(6, 2),
+(7, 1),
+(8, 2),
 (9, 1),
 (10, 1),
 (11, 1),
 (12, 1),
-(13, 2),
+(13, 1),
 (14, 1),
 (15, 1),
 (16, 1),
 (17, 1),
 (18, 1),
 (19, 1),
-(20, 1);
+(20, 2),
+(22, 2),
+(23, 1);
 
 -- --------------------------------------------------------
 
@@ -125,22 +147,25 @@ CREATE TABLE `students` (
 --
 
 INSERT INTO `students` (`id`, `name`, `phone_number`, `username`, `password`) VALUES
-(2, 'Ahmad', '054845454', 'Df', '1122');
+(2, 'Khaled', '0556874', 'Xxcr00', '885522'),
+(3, 'Clooasd', '055555778', 'Zaxx8', '85208520'),
+(5, 'Amnah', '055648615', 'amon33', '112233'),
+(6, 'Ricko', '0555454552', 'Ricl545', '112233');
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `Administrative`
+-- Indexes for table `administrative`
 --
-ALTER TABLE `Administrative`
+ALTER TABLE `administrative`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `Administrator`
+-- Indexes for table `administrator`
 --
-ALTER TABLE `Administrator`
+ALTER TABLE `administrator`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -166,34 +191,34 @@ ALTER TABLE `students`
 --
 
 --
--- AUTO_INCREMENT for table `Administrative`
+-- AUTO_INCREMENT for table `administrative`
 --
-ALTER TABLE `Administrative`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `administrative`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `Administrator`
+-- AUTO_INCREMENT for table `administrator`
 --
-ALTER TABLE `Administrator`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+ALTER TABLE `administrator`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `lockers`
 --
 ALTER TABLE `lockers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
