@@ -132,14 +132,7 @@ if(isset($_POST['submit'])){
 </a>
 </div>
 
-<ul id="QnikoMenu" class="sm sm-simple qnikoMenu">
-<li>
- <a href="index.html">Home</a>
-</li>
-<li><a href="about.html">About</a></li>
 
-<li><a href="#">Pages</a></li>
-</ul>
 </nav>
 </div>
 <?php if(!isLoged()): ?>
@@ -268,77 +261,12 @@ if(isset($_POST['submit'])){
 </div>
 </div>
 <div class="container">
-<div class="row">
-<div class="col-md-4">
-<div class="f-widget fw-logo-text">
-<img src="../assets/img/logo3.png" alt="Logo">
-<p>Materfront avenue, street
-2005F, USA</p>
-<a href="tel:+1720.661.2231">+1 720.661.2231</a>
-<div class="footer-social">
-<ul class="social-list">
-<li><a href="https://twitter.com/voidcoders"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-<li><a href="https://www.facebook.com/voidcoders/"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-<li><a href="https://www.instagram.com/voidcoders/"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
-<li><a href="https://www.linkedin.com/company/voidcoders"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
-</ul>
-</div>
-</div>
-</div>
-<div class="col-md-8">
-<div class="row">
-<div class="col-md-4">
-<div class="f-widget">
-<h4>Services</h4>
-<ul class="fw-links">
-<li><a href="#">Web Design</a></li>
-<li><a href="#">Web Development</a></li>
-<li><a href="#">Branding</a></li>
-<li><a href="#">Online Marketing</a></li>
-<li><a href="#">Content</a></li>
-</ul>
-</div>
-</div>
-<div class="col-md-4">
-<div class="f-widget">
-<h4>About Us</h4>
-<ul class="fw-links">
-<li><a href="#">About us</a></li>
-<li><a href="#">Work Portfolio</a></li>
-<li><a href="#">Team</a></li>
-<li><a href="#">Plan & Pricing</a></li>
-</ul>
-</div>
-</div>
-<div class="col-md-4">
-<div class="f-widget">
-<h4>Resources</h4>
-<ul class="fw-links">
-<li><a href="#">Redources</a></li>
-<li><a href="#">News</a></li>
-<li><a href="#">API Docs</a></li>
-<li><a href="#">Help Center</a></li>
-<li><a href="#">Career</a></li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-</div>
+
 <div class="footer-copyright">
 <div class="row">
-<div class="col-md-6">
-<div class="copyright-text">
-<p>© 2020 Qniko. All Rights Reserved By VoidCoders</p>
-</div>
-</div>
-<div class="col-md-6">
-<div class="fc-links">
-<ul>
-<li><a href="#">Privace & Policy.</a></li>
-<li><a href="#">Faq.</a></li>
-<li><a href="#">Terms.</a></li>
-</ul>
+<div class="col-md-12">
+<div class="copyright-text text-center">
+<p>© 2022 All Rights Reserved</p>
 </div>
 </div>
 </div>

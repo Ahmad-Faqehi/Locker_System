@@ -119,60 +119,7 @@ if($lockers['approved'] == 'Approve'){
 </a>
 </div>
 
-<ul id="QnikoMenu" class="sm sm-simple qnikoMenu">
-<li>
-<a href="index.html">Home</a>
-<ul>
-<li><a href="index.html">Home 1</a></li>
-<li><a href="index-2.html">Home 2</a></li>
-<li><a href="index-3.html">Home 3</a></li>
-<li><a href="index-4.html">Home 4</a></li>
-<li><a href="index-5.html">Home 5</a></li>
-</ul>
-</li>
-<li><a href="about.html">About</a></li>
-<li><a href="services.html">Services</a></li>
-<li><a href="blog.html">News</a>
-<ul>
-<li><a href="blog.html">Blog Grid</a></li>
-<li><a href="blog-2.html">Blog Grid 2</a>
-<ul>
-<li><a href="">Blog Details</a></li>
-</ul>
-</li>
-<li><a href="blog-3.html">Blog With Sidebar</a></li>
-</ul>
-</li>
-<li><a href="products.html">Shop</a>
-<ul>
-<li><a href="product-single.html">Product Details</a></li>
-<li><a href="checkout.html">Checkout</a></li>
-</ul>
-</li>
-<li><a href="#">Pages</a>
-<ul>
-<li><a href="about-2.html">About 2</a></li>
-<li><a href="about-3.html">About 3</a></li>
-<li><a href="portfolio-1.html">Portfolio</a>
-<ul>
-<li><a href="portfolio-2.html">Portfolio 2</a></li>
-<li><a href="portfolio-single.html">Portfolio Single</a></li>
-</ul>
-</li>
-<li><a href="service-2.html">Service 2</a></li>
-<li><a href="service-3.html">Service 3</a></li>
-<li><a href="team.html">Team</a></li>
-<li><a href="contact-2.html">Contact 2</a></li>
-<li><a href="contact-3.html">Contact 3</a></li>
-<li><a href="404.html">404</a>
-<ul>
-<li><a href="faq.html">Faq</a></li>
-<li><a href="coming-soon.html">Coming Soon</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
+
 </nav>
 </div>
 <div class="col-md-4">
@@ -325,77 +272,12 @@ if($lable == "Approved"): ?>
 </div>
 </div>
 <div class="container">
-<div class="row">
-<div class="col-md-4">
-<div class="f-widget fw-logo-text">
-<img src="../assets/img/logo3.png" alt="Logo">
-<p>Materfront avenue, street
-2005F, USA</p>
-<a href="tel:+1720.661.2231">+1 720.661.2231</a>
-<div class="footer-social">
-<ul class="social-list">
-<li><a href="https://twitter.com/voidcoders"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-<li><a href="https://www.facebook.com/voidcoders/"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-<li><a href="https://www.instagram.com/voidcoders/"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
-<li><a href="https://www.linkedin.com/company/voidcoders"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
-</ul>
-</div>
-</div>
-</div>
-<div class="col-md-8">
-<div class="row">
-<div class="col-md-4">
-<div class="f-widget">
-<h4>Services</h4>
-<ul class="fw-links">
-<li><a href="#">Web Design</a></li>
-<li><a href="#">Web Development</a></li>
-<li><a href="#">Branding</a></li>
-<li><a href="#">Online Marketing</a></li>
-<li><a href="#">Content</a></li>
-</ul>
-</div>
-</div>
-<div class="col-md-4">
-<div class="f-widget">
-<h4>About Us</h4>
-<ul class="fw-links">
-<li><a href="#">About us</a></li>
-<li><a href="#">Work Portfolio</a></li>
-<li><a href="#">Team</a></li>
-<li><a href="#">Plan & Pricing</a></li>
-</ul>
-</div>
-</div>
-<div class="col-md-4">
-<div class="f-widget">
-<h4>Resources</h4>
-<ul class="fw-links">
-<li><a href="#">Redources</a></li>
-<li><a href="#">News</a></li>
-<li><a href="#">API Docs</a></li>
-<li><a href="#">Help Center</a></li>
-<li><a href="#">Career</a></li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-</div>
+
 <div class="footer-copyright">
 <div class="row">
-<div class="col-md-6">
-<div class="copyright-text">
-<p>© 2020 Qniko. All Rights Reserved By VoidCoders</p>
-</div>
-</div>
-<div class="col-md-6">
-<div class="fc-links">
-<ul>
-<li><a href="#">Privace & Policy.</a></li>
-<li><a href="#">Faq.</a></li>
-<li><a href="#">Terms.</a></li>
-</ul>
+<div class="col-md-12">
+<div class="copyright-text text-center">
+<p>© 2022 All Rights Reserved</p>
 </div>
 </div>
 </div>
