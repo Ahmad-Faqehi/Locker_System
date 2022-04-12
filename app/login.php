@@ -1,6 +1,7 @@
 
 <?php
-
+//phpinfo();
+//die();
 include "inc/conf.php";
 $msg = "";
 if(isLoged()){

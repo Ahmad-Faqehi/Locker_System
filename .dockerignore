@@ -2,3 +2,5 @@
 map.txt
 *.md
 docker-compose.yml
+db/
+Dockerfile

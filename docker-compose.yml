@@ -14,7 +14,7 @@ services:
       MYSQL_USER: ahmad
       MYSQL_PASSWORD: password
     ports:
-      - "6033:3306"
+      - "3306:3306"
 
   # phpmyadmin
   phpmyadmin:
@@ -24,21 +24,20 @@ services:
     container_name: phpmyadmin
     restart: always
     ports:
-      - '8080:80'
+      - '8088:80'
     environment:
       PMA_HOST: database
       MYSQL_ROOT_PASSWORD: password 
  # PHP with PDO
   web:
-    build:
-      context: .
-      dockerfile: php.dockerfile
+    build: .
     container_name: php_web
     depends_on:
       - database
     volumes:
       - .:/var/www/html/:delegated
+#      - ./php_config.ini:/usr/local/etc/php/php_no_errors.ini
     ports:
-      - "8100:80"
+      - "8000:80"
     stdin_open: true
     tty: true

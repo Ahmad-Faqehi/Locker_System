@@ -16,9 +16,9 @@ if(isset($_POST['submit'])){
 
         if($as == "Administrative"){
             //
-            $stm = $conn->prepare(" select * from Administrative where username = '$username' ");
+            $stm = $conn->prepare(" select * from administrative where username = '$username' ");
         }else{
-            $stm = $conn->prepare(" select * from Administrator where username = '$username' ");
+            $stm = $conn->prepare(" select * from administrator where username = '$username' ");
         }
 
         
