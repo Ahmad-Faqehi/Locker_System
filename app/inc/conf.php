@@ -1,13 +1,11 @@
 <?php
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
+session_start();
 
 
 //$db_host = "localhost";
 //$db_user = "root";
 //$db_pass = "";
-$db_database = "lockers";
+//$db_database = "lockers";
  $db_host = "database";
  $db_user = "ahmad";
  $db_pass = "password";
