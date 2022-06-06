@@ -52,6 +52,12 @@
                     <span>Lockers</span></a>
             </li>
 
+            <li class="nav-item <?php if($pagename == 'alternate'){echo 'active';} ?>">
+                <a class="nav-link" href="alternate.php">
+                    <i class="fas fa-key"></i>
+                    <span>Alternate Key</span></a>
+            </li>
+
             <!-- Divider -->
             <hr class="sidebar-divider">
 

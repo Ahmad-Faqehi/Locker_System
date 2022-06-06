@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 03, 2022 at 11:07 PM
+-- Generation Time: Jun 06, 2022 at 10:28 PM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.3.1
 
@@ -28,12 +28,12 @@ SET time_zone = "+00:00";
 -- Table structure for table `administrative`
 --
 
-
 DROP TABLE IF EXISTS `students`;
 DROP TABLE IF EXISTS `lockers`;
 DROP TABLE IF EXISTS `booking`;
 DROP TABLE IF EXISTS `administrator`;
 DROP TABLE IF EXISTS `administrative`;
+
 
 CREATE TABLE `administrative` (
   `id` int(11) NOT NULL,
@@ -48,7 +48,8 @@ CREATE TABLE `administrative` (
 --
 
 INSERT INTO `administrative` (`id`, `name`, `phone_number`, `username`, `password`) VALUES
-(1, 'Mohmmed', '059856488', 'Ismael', '112233');
+(1, 'Mohmmed', '059856488', 'Ismael', '112233'),
+(2, 'Sara Ali', '0542845328', 'sara75', '112233');
 
 -- --------------------------------------------------------
 
@@ -84,15 +85,21 @@ CREATE TABLE `booking` (
   `locker_id` int(11) NOT NULL,
   `employee_id` int(11) DEFAULT NULL,
   `approved` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT 'Pending',
-  `time_on` int(25) NOT NULL
+  `time_on` int(25) NOT NULL,
+  `alternate_key` int(11) NOT NULL DEFAULT '0',
+  `attachment` varchar(225) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `employee_alternate` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `booking`
 --
 
-INSERT INTO `booking` (`id`, `student_id`, `locker_id`, `employee_id`, `approved`, `time_on`) VALUES
-(15, 5, 3, NULL, 'Pending', 1654290276);
+INSERT INTO `booking` (`id`, `student_id`, `locker_id`, `employee_id`, `approved`, `time_on`, `alternate_key`, `attachment`, `employee_alternate`) VALUES
+(15, 5, 3, 1, 'Approve', 1654290276, 0, 'uploads/فاينل حوسبة 2019.pdf', NULL),
+(16, 6, 2, 1, 'Approve', 1654540672, 2, 'uploads/Picture1.png', 1),
+(17, 9, 10, 2, 'Approve', 1654545232, 2, 'uploads/Picture1.png', NULL),
+(19, 3, 12, 2, 'Approve', 1654547037, 2, 'uploads/2.jpg', 2);
 
 -- --------------------------------------------------------
 
@@ -113,7 +120,7 @@ CREATE TABLE `lockers` (
 
 INSERT INTO `lockers` (`id`, `locker_number`, `building`, `status`) VALUES
 (38, '1', 'A2', 1),
-(39, '2', 'A1', 1),
+(39, '2', 'A1', 2),
 (40, '3', 'A1', 2),
 (41, '4', 'A1', 1),
 (42, '5', 'A1', 1),
@@ -121,8 +128,8 @@ INSERT INTO `lockers` (`id`, `locker_number`, `building`, `status`) VALUES
 (44, '7', 'A1', 1),
 (45, '8', 'A1', 1),
 (46, '9', 'A1', 1),
-(47, '10', 'A1', 1),
-(48, '12', 'A1', 1),
+(47, '10', 'A1', 2),
+(48, '12', 'A1', 2),
 (49, '11', 'A2', 1),
 (50, '21', 'X1', 1),
 (51, '13', 'A2', 1),
@@ -169,7 +176,8 @@ INSERT INTO `students` (`id`, `name`, `phone_number`, `student_id`, `password`) 
 (5, 'Amnah', '055648615', '201952454', '112233'),
 (6, 'Ricko', '0555454552', '20202285', '112233'),
 (7, 'Test User', '056441545', '20202125', '1122'),
-(8, 'Demo', '05646546546', '20202051', '1122');
+(8, 'Demo', '05646546546', '20202051', '1122'),
+(9, 'Samiah', '05666666666', '202222154', '112233');
 
 --
 -- Indexes for dumped tables
@@ -213,7 +221,7 @@ ALTER TABLE `students`
 -- AUTO_INCREMENT for table `administrative`
 --
 ALTER TABLE `administrative`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `administrator`
@@ -225,7 +233,7 @@ ALTER TABLE `administrator`
 -- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `lockers`
@@ -237,7 +245,7 @@ ALTER TABLE `lockers`
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

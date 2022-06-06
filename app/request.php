@@ -6,29 +6,12 @@ if(!isLoged()){
     die();
 }
 $userid = $_SESSION['user:id'];
-$sql = "SELECT * FROM booking INNER JOIN students ON booking.student_id = students.id WHERE students.id = $userid";
-$lockers = $conn->query($sql)->fetch();
+
+
 $booking_id = $conn->query("SELECT booking.id FROM booking INNER JOIN students ON booking.student_id = students.id WHERE students.id = $userid")->fetch();
 $booking_id = $booking_id['id'];
-
-$has_req = true;
 $msg = "";
-// print_r($lockers);
-// die();
-if(empty($lockers)){
 
-    $msg = '<div class="alert alert-danger" role="alert">
-    Your do not have request yet !!. to make order click <a href="locker.php" class="btn-link">here</a>
-  </div>';
-  $has_req = false;
-}
-
-if($lockers['approved'] == 'Approve'){
-
-  $emp_id = $lockers['employee_id'];
-  $employee_sql = "SELECT * FROM `administrative` WHERE id = $emp_id";
-  $employee = $conn->query($employee_sql)->fetch();
-}
 
 if(isset($_POST['submit'])){
   $bookingid = $_POST['bookingid'];
@@ -48,6 +31,31 @@ if(isset($_POST['submit'])){
 
 
 }
+
+$sql = "SELECT * FROM booking INNER JOIN students ON booking.student_id = students.id WHERE students.id = $userid";
+$lockers = $conn->query($sql)->fetch();
+
+
+$has_req = true;
+
+// print_r($lockers);
+// die();
+if(empty($lockers)){
+
+    $msg = '<div class="alert alert-danger" role="alert">
+    Your do not have request yet !!. to make order click <a href="locker.php" class="btn-link">here</a>
+  </div>';
+  $has_req = false;
+}
+
+if($lockers['approved'] == 'Approve'){
+
+  $emp_id = $lockers['employee_id'];
+  $employee_sql = "SELECT * FROM `administrative` WHERE id = $emp_id";
+  $employee = $conn->query($employee_sql)->fetch();
+}
+
+
 
 ?>
 <!DOCTYPE html>
@@ -261,6 +269,8 @@ if($lable == "Approved"): ?>
   <br>
   Name: <b><?=$employee['name']?></b> <br>
   Phone Number: <a href="tel:<?=$employee['phone_number']?>"> <b><?=$employee['phone_number']?></b> </a>
+  <br> <br>
+Please contact to receive the key.
 </p>
 
 </div>
@@ -273,6 +283,8 @@ if($lable == "Approved"): ?>
 <?php endif ?>
 
 </div>
+
+<?php if($lable == "Approved"){ ?>
 
 <div class="row">
 <div class="col-md-12">
@@ -293,7 +305,7 @@ else:
  endif ?>
 
 </div>
-
+<?php } ?>
 </div>
 </div>
 </div>

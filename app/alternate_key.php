@@ -9,13 +9,19 @@ if(!isLoged()){
 $userid = $_SESSION['user:id'];
 $sql = "SELECT * FROM booking INNER JOIN students ON booking.student_id = students.id WHERE students.id = $userid";
 $lockers = $conn->query($sql)->fetch();
+
 $booking_id = $conn->query("SELECT booking.id FROM booking INNER JOIN students ON booking.student_id = students.id WHERE students.id = $userid")->fetch();
 $booking_id = $booking_id['id'];
 
 $has_req = true;
 $msg = "";
-// print_r($lockers);
-// die();
+
+
+if($lockers['alternate_key'] == 0){
+  header("Location: request.php");
+  die();
+}
+
 if(empty($lockers)){
 
     $msg = '<div class="alert alert-danger" role="alert">
@@ -240,15 +246,15 @@ if(isset($_POST['submit'])){
   </tbody>
 </table>
 <?php endif; 
-if ($has_req):
-if($lockers['alternate_key'] == "2")?>
+
+if($lockers['alternate_key'] == "2") :?>
 
 <div class="row">
 <div class="col-md-12">
 <div class="product-info-tab" style="padding: 14px 0px;">
 <nav>
 <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-<a class="nav-item nav-link active show" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true"> <?=$lockers['alternate_key']?> Employee Details</a>
+<a class="nav-item nav-link active show" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true"> Employee Details</a>
 </div>
 </nav>
 <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
@@ -260,6 +266,8 @@ if($lockers['alternate_key'] == "2")?>
   <br>
   Name: <b><?=$employee['name']?></b> <br>
   Phone Number: <a href="tel:<?=$employee['phone_number']?>"> <b><?=$employee['phone_number']?></b> </a>
+<br> <br>
+Please contact to receive the key.
 </p>
 
 </div>
