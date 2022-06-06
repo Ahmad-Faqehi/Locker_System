@@ -30,6 +30,17 @@ function findphonebyid($id){
     endif;
 }
 
+function findsidbyid($id){
+    global $conn;
+    $stuent = $conn->query("SELECT * FROM `students` where id = $id")->fetch();
+    
+    if(!empty($stuent)):
+        return $stuent['student_id'];
+    else:
+        return "Unknown";
+    endif;
+}
+
 function status($arg){
     if($arg == "Approve"){
         return  "<span class='text-success'>Approved</span>";
@@ -38,6 +49,24 @@ function status($arg){
     }
 }
 
+function updateLocker($id){
+    global $conn;
+
+    // Todo: find the id of locker from booking table
+    $sql_booking = "select locker_id from booking where id = $id LIMIT 1";
+    $locker_number = $conn->query($sql_booking)->fetch();
+    $locker_number = $locker_number['locker_id'];
+
+
+    $sql = "UPDATE `lockers` SET `status`='1' WHERE locker_number = $locker_number";
+    $stmt = $conn->prepare("$sql");
+    $executed = $stmt->execute();
+    if($executed){
+        return true;
+    }else{
+        false;
+    }
+}
 
 if(isset($_POST['submit'])){
     
@@ -59,6 +88,10 @@ if(isset($_POST['submit'])){
 if(isset($_GET['del'])){
     $id = $_GET['del'];
 
+    // Todo: make the locaker availbe after delete the order.
+    if(updateLocker($id)){
+
+    
     $sql = "DELETE FROM `booking` WHERE id = $id";
     $stmt = $conn->prepare("$sql");
     $executed = $stmt->execute();
@@ -68,6 +101,11 @@ if(isset($_GET['del'])){
       </div>';
      // header("Location: requstes.php");
     }
+}else{
+    $msg = '<div class="alert alert-danger" role="alert">
+        There some error.
+      </div>';
+}
 }
 
 $booking = $conn->query("SELECT * FROM `booking`")->fetchAll();
@@ -83,7 +121,7 @@ $booking = $conn->query("SELECT * FROM `booking`")->fetchAll();
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Dashboard</title>
+    <title> Lockers System </title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -177,7 +215,8 @@ $booking = $conn->query("SELECT * FROM `booking`")->fetchAll();
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                   <thead>
                     <tr>
-                      <th>#</th>
+                      <th>Order Number</th>
+                      <th>Student ID</th>
                       <th>Student Name</th>
                       <th>Locker Number</th>
                       <th>Time</th>
@@ -195,6 +234,7 @@ $booking = $conn->query("SELECT * FROM `booking`")->fetchAll();
                       ?>
                     <tr>
                       <td><?=$val['id']?></td>
+                      <td><?=findsidbyid($val['student_id'])?></td>
                       <td><?=finduserbyid($val['student_id'])?></td>
                       <td><?=$val['locker_id']?></td>
                       <td><?=date('Y-m-d | H:i', $val['time_on'])?></td>
@@ -222,7 +262,7 @@ $booking = $conn->query("SELECT * FROM `booking`")->fetchAll();
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2021</span>
+                        <span>Copyright &copy; Lockers System 2022</span>
                     </div>
                 </div>
             </footer>
@@ -252,9 +292,13 @@ $booking = $conn->query("SELECT * FROM `booking`")->fetchAll();
       </div>
       <div class="modal-body">
       <form method="POST" action="">
+      <div class="form-group"> 
+    <label for="exampleInputPassword1">Studen ID</label>
+    <input type="text" class="form-control" id="exampleInputPassword1" style="font-size: medium;" value="<?=findsidbyid($val['student_id'])?>" readonly >
+  </div>
   <div class="form-group">
     <label for="exampleInputEmail1">Student Name</label>
-    <input type="email" class="form-control" id="exampleInputEmail1" style="font-size: medium;"  value="<?=finduserbyid($val['student_id'])?>" readonly >
+    <input type="text" class="form-control" id="exampleInputEmail1" style="font-size: medium;"  value="<?=finduserbyid($val['student_id'])?>" readonly >
     <input type="hidden" name="order_id"  value=" <?=$val['id']?>"  >
   </div>
   <div class="form-group"> 

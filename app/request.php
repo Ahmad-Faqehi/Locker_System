@@ -2,12 +2,15 @@
 include "inc/conf.php";
 
 if(!isLoged()){
-    header("Location: index.html");
+    header("Location: index.php");
     die();
 }
 $userid = $_SESSION['user:id'];
 $sql = "SELECT * FROM booking INNER JOIN students ON booking.student_id = students.id WHERE students.id = $userid";
 $lockers = $conn->query($sql)->fetch();
+$booking_id = $conn->query("SELECT booking.id FROM booking INNER JOIN students ON booking.student_id = students.id WHERE students.id = $userid")->fetch();
+$booking_id = $booking_id['id'];
+
 $has_req = true;
 $msg = "";
 // print_r($lockers);
@@ -15,7 +18,7 @@ $msg = "";
 if(empty($lockers)){
 
     $msg = '<div class="alert alert-danger" role="alert">
-    Your do not have request yet !!
+    Your do not have request yet !!. to make order click <a href="locker.php" class="btn-link">here</a>
   </div>';
   $has_req = false;
 }
@@ -27,13 +30,32 @@ if($lockers['approved'] == 'Approve'){
   $employee = $conn->query($employee_sql)->fetch();
 }
 
+if(isset($_POST['submit'])){
+  $bookingid = $_POST['bookingid'];
+
+  $filename = $_FILES["uploadfile"]["name"];
+  $tempname = $_FILES["uploadfile"]["tmp_name"];
+  $folder = "uploads/".$filename;
+
+  if(move_uploaded_file($tempname,$folder)){
+    $sql = "UPDATE `booking` SET `attachment`='$folder', alternate_key = 1 WHERE id = '$booking_id'";
+    $stmt= $conn->prepare($sql);
+    $executed = $stmt->execute();
+    $msg = '<div class="alert alert-success" role="alert">
+    Your request done successfuly.</a>
+  </div>';
+  }
+
+
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 
 <meta charset="utf-8">
-<title>Qniko - Startup Agency HTML Template</title>
+<title>Locker System</title>
 <meta name="description" content="">
 <meta name="author" content="">
 <meta name="keywords" content="">
@@ -124,7 +146,7 @@ if($lockers['approved'] == 'Approve'){
 </div>
 <div class="col-md-4">
 <div class="qnRight">
-<a href="contact.html" class="btn-style-a">Contact US</a>
+<a href="logout.php" class="btn-style-a">Logout</a>
 </div>
 </div>
 </div>
@@ -160,7 +182,7 @@ if($lockers['approved'] == 'Approve'){
 </div>
 <div class="page-breadcrumb">
 <ul>
-<li><a href="index.html">Home</a></li>
+<li><a href="index.php">Home</a></li>
 <li>Request</li>
 </ul>
 </div>
@@ -200,14 +222,17 @@ if($lockers['approved'] == 'Approve'){
 <table class="table">
   <thead>
     <tr>
+      <th scope="col">Order Number</th>
       <th scope="col">Name</th>
       <th scope="col">Locker Number</th>
       <th scope="col">Time</th>
       <th scope="col">Status</th>
+      
     </tr>
   </thead>
   <tbody>
     <tr>
+      <td><?=$booking_id?></td>
       <td><?=$lockers['name']?></td>
       <td><?=$lockers['locker_id']?></td>
       <td ><?=date('h:i A m-d-Y ', $lockers['time_on'])?></td>
@@ -216,6 +241,7 @@ if($lockers['approved'] == 'Approve'){
   </tbody>
 </table>
 <?php endif; 
+if ($has_req):
 if($lable == "Approved"): ?>
 
 <div class="row">
@@ -244,12 +270,84 @@ if($lable == "Approved"): ?>
 </div>
 
 <?php endif ?>
+<?php endif ?>
 
 </div>
+
+<div class="row">
+<div class="col-md-12">
+<div class="product-info-tab" style="padding: 14px 0px;">
+<nav>
+<div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+<a class="nav-item nav-link active show" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Alternate Key</a>
+</div>
+</nav>
+<div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
+<div class="tab-pane fade active show" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+
+<div class="text-center">
+<?php if($lockers['alternate_key'] == 0):
+   echo "<td><a href='#' data-toggle='modal' data-target='#exampleModal' class='btn-style-f'>Ask for New Key</a></td>";
+else:
+  echo "<td><a href='alternate_key.php' class='btn-style-d'>Show Your Request Details</a></td>";
+ endif ?>
+
+</div>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+
 
 </div>
 </div>
 </section>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Alternate Key </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <form method="POST" action="" enctype="multipart/form-data">
+  <div class="form-group">
+    <label for="exampleInputEmail1">Your Student ID</label>
+    <input type="text" class="form-control" id="exampleInputEmail1" style="font-size: medium;" value="<?=$lockers['student_id']?>"  readonly >
+  </div>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Your Name</label>
+    <input type="text" class="form-control" id="exampleInputEmail1" style="font-size: medium;" value="<?=$lockers['name']?>"  readonly >
+    <input type="hidden" name="bookingid" value="<?=$booking_id?>"  >
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Your Phone Number</label>
+    <input type="text" class="form-control" id="exampleInputPassword1" style="font-size: medium;" value="<?=$lockers['phone_number']?>" readonly >
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Locker Number</label>
+    <input type="text" class="form-control" name="locker_id" style="font-size: medium;" value="<?=$lockers['locker_id']?>" readonly >
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">File</label>
+    <input type="file" class="form-control" name="uploadfile" style="font-size: medium; height: auto;"  >
+  </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <input type="submit" value="submit" class="btn btn-primary" name="submit">
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 
 <footer class="footerV2-area">
 <div class="graphicanimation-area">

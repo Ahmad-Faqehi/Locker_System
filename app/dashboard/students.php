@@ -48,7 +48,7 @@ if(isset($_POST['submit'])){
     $password = $_POST['password'];
     $username = $_POST['username'];
 
-    $sql = "UPDATE `students` SET `name`='$name',`phone_number`='$phone',`username`='$username',`password`='$password' WHERE id = $id";
+    $sql = "UPDATE `students` SET `name`='$name',`phone_number`='$phone',`student_id`='$username',`password`='$password' WHERE id = $id";
     $stmt = $conn->prepare("$sql");
     $executed = $stmt->execute();
     if($executed){
@@ -85,7 +85,7 @@ $students = $conn->query("SELECT * FROM `students`")->fetchAll();
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Dashboard</title>
+    <title> Lockers System </title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -212,7 +212,7 @@ $students = $conn->query("SELECT * FROM `students`")->fetchAll();
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2021</span>
+                        <span>Copyright &copy; Lockers System 2022</span>
                     </div>
                 </div>
             </footer>
@@ -249,8 +249,8 @@ $students = $conn->query("SELECT * FROM `students`")->fetchAll();
   </div>
 
   <div class="form-group">
-    <label>Username</label>
-    <input type="text" class="form-control" name="username" style="font-size: medium;" value="<?=$val['username'] ?>" >
+    <label>Student ID</label>
+    <input type="text" class="form-control" name="username" style="font-size: medium;" value="<?=$val['student_id'] ?>" >
   </div>
 
   <div class="form-group"> 

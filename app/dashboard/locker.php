@@ -9,6 +9,8 @@ if(!isset($_SESSION['admin:id'])){
 
 $msg = "";
 
+$last_locker = $conn->query("SELECT locker_number FROM lockers ORDER BY id DESC LIMIT 1;")->fetch();
+$last_locker = $last_locker['locker_number'];
 
 function status($arg){
     if($arg == 1){
@@ -18,15 +20,73 @@ function status($arg){
     }
 }
 
+function addMultiLcokers($count, $number, $build, $status){
+
+$sql = "INSERT INTO lockers (`locker_number`,`building`,`status`) VALUES ";
+for($i=1; $i<=$count; $i++){
+  $number++;
+  $sql .= "('$number','$build','$status'),";
+}
+$sql = rtrim($sql, ", ");
+
+return $sql;
+}
+
+function chcekLockerNum($locker_number){
+  global $conn;
+
+  $sql = "SELECT locker_number FROM `lockers` where `locker_number` = '$locker_number' LIMIT 1";
+  $result= $conn->query("$sql")->fetch();
+  $result = $result['locker_number'];
+
+  if($result){
+    return true;
+  }else{
+    return false;
+  }
+}
+
+function getLockerByID($id){
+  global $conn;
+
+  $sql = "SELECT locker_number FROM `lockers` where `id` = '$id' LIMIT 1";
+  $result= $conn->query("$sql")->fetch();
+  $result = $result['locker_number'];
+
+  return $result;
+}
+
+
+if(isset($_GET['ava'])){
+ 
+
+  $sql = "UPDATE `lockers` SET `status`='1'";
+  $stmt = $conn->prepare("$sql");
+  $executed = $stmt->execute();
+  if($executed){
+      $msg = '<div class="alert alert-success" role="alert">
+      All lockers has been updated to available.
+    </div>';
+  }
+}
 
 if(isset($_POST['submit'])){
     
 
     $id = $_POST['id'];
     $status = $_POST['status'];
+    $building = $_POST['building'];
+    $locker_number = $_POST['locker_number'];
 
+    // echo $locker_number . " == ". getLockerByID($id);
+    // die();
+    if(chcekLockerNum($locker_number) && $locker_number != getLockerByID($id) ){
+      $msg = '<div class="alert alert-danger" role="alert">
+        The Locker Number '.$locker_number.' is alerady exist.
+      </div>';
+    }else{
 
-    $sql = "UPDATE `lockers` SET `status`='$status' WHERE id = $id";
+    $sql = "UPDATE `lockers` SET `status`='$status', `building` = '$building', `locker_number` = '$locker_number' WHERE id = $id";
     $stmt = $conn->prepare("$sql");
     $executed = $stmt->execute();
     if($executed){
@@ -35,13 +95,20 @@ if(isset($_POST['submit'])){
       </div>';
     }
 }
+}
 
-if(isset($_POST['add'])){
-    
+if(isset($_POST['add_singl'])){
+    $lockers_number = $_POST['number'];
+    $builden = $_POST['building_singl'];
     $status = $_POST['status'];
 
-
-    $sql = "INSERT INTO `lockers`(`status`) VALUES ('$status')";
+  //Todo: chcek if locker number already there
+  if(chcekLockerNum($lockers_number)){
+    $msg = '<div class="alert alert-danger" role="alert">
+      The Locker Number '.$lockers_number.' is alerady exist.
+    </div>';
+  }else{
+    $sql = "INSERT INTO `lockers`(`status`,`building`, `locker_number`) VALUES ('$status','$builden', '$lockers_number')";
     $stmt = $conn->prepare("$sql");
     $executed = $stmt->execute();
     if($executed){
@@ -49,6 +116,25 @@ if(isset($_POST['add'])){
         The add done sucessfuly.
       </div>';
     }
+  }
+
+}elseif(isset($_POST['add_multi'])){
+
+  $lockers_number = $_POST['number_locker'];
+  $builden = $_POST['building'];
+  $status = $_POST['status_multi'];
+
+  $sql = addMultiLcokers($lockers_number,$last_locker,$builden,$status);
+
+  //$sql = "INSERT INTO `lockers`(`status`,`building`) VALUES ('$status','$builden')";
+  $stmt = $conn->prepare("$sql");
+  $executed = $stmt->execute();
+  if($executed){
+      $msg = '<div class="alert alert-success" role="alert">
+      The add done sucessfuly.
+    </div>';
+  }
+
 }
 
 if(isset($_GET['del'])){
@@ -66,6 +152,8 @@ if(isset($_GET['del'])){
 }
 
 $lockers = $conn->query("SELECT * FROM `lockers`")->fetchAll();
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -78,7 +166,7 @@ $lockers = $conn->query("SELECT * FROM `lockers`")->fetchAll();
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Dashboard</title>
+    <title> Lockers System </title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -89,6 +177,7 @@ $lockers = $conn->query("SELECT * FROM `lockers`")->fetchAll();
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/radio.css">
 
 
         <!-- Bootstrap core JavaScript-->
@@ -173,6 +262,7 @@ $lockers = $conn->query("SELECT * FROM `lockers`")->fetchAll();
                   <thead>
                     <tr>
                       <th>Number</th>
+                      <th>Building</th>
                       <th>status</th>
                       <th>Other</th>
                     </tr>
@@ -180,7 +270,8 @@ $lockers = $conn->query("SELECT * FROM `lockers`")->fetchAll();
                   <tbody>
                       <?php foreach($lockers as $val): ?>
                     <tr>
-                      <td><?=$val['id']?></td>
+                      <td><?=$val['locker_number']?></td>
+                      <td><?=$val['building']?></td>
                       <td><?=status($val['status'])?></td>
                       <td><a href="#" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal<?=$val['id']?>">Edit</a></td>
                     </tr>
@@ -198,7 +289,14 @@ $lockers = $conn->query("SELECT * FROM `lockers`")->fetchAll();
                                         </span>
                                         <span class="text">New Locker</span>
                                     </a>
+                  <a href="#" class="btn btn-warning btn-icon-split" data-toggle="modal" data-target="#ModalOps">
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-cog"></i>
+                                        </span>
+                                        <span class="text">Option</span>
+                                    </a>
               </div>
+
             </div>
           </div>
 
@@ -212,7 +310,7 @@ $lockers = $conn->query("SELECT * FROM `lockers`")->fetchAll();
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2021</span>
+                        <span>Copyright &copy; Lockers System 2022</span>
                     </div>
                 </div>
             </footer>
@@ -242,7 +340,16 @@ $lockers = $conn->query("SELECT * FROM `lockers`")->fetchAll();
       </div>
       <div class="modal-body">
       <form method="POST" action="">
+     
+  <div class="form-group">
+    <label>Locker Number</label>
+    <input type="text" class="form-control" id="exampleInputEmail1" name="locker_number" style="font-size: medium;" value="<?=$val['locker_number']?>">
+  </div>
 
+      <div class="form-group">
+    <label>Building</label>
+    <input type="text" class="form-control" id="exampleInputEmail1" name="building" style="font-size: medium;" value="<?=$val['building']?>">
+  </div>
   <div class="form-group">
   <label>Status</label>
   <input type="hidden" name="id"  value=" <?=$val['id']?>"  >
@@ -253,6 +360,8 @@ $lockers = $conn->query("SELECT * FROM `lockers`")->fetchAll();
   </div>
 
     <input type="submit" value="submit" class="btn btn-primary" name="submit">
+
+   
 </div>
       <div class="modal-footer">
         <a href="?del=<?=$val['id']?>" class="btn btn-danger">Delete</a>
@@ -288,6 +397,33 @@ $lockers = $conn->query("SELECT * FROM `lockers`")->fetchAll();
       <div class="modal-body">
 
       <form action="" method="POST" >
+
+      
+      <div id="container">
+        Select Option:
+  <div class="tabs">
+    <label class="tab">
+      <input type="radio" name="tab-input" class="tab-input" id="radio_1">
+      <div class="tab-box">Single Locker</div>
+    </label>
+    <label class="tab">
+      <input type="radio" name="tab-input" class="tab-input" id="radio_2">
+      <div class="tab-box">Multi Locker</div>
+    </label>
+  </div>
+</div>
+
+<br>
+
+      <div class="hiden_singl">
+                                <div class="form-group">
+                                    <label>Locker Number</label>
+                                    <input type="text" class="form-control" id="exampleInputEmail1" name="number" style="font-size: medium;">
+                                </div>
+                                <div class="form-group">
+                                    <label>Building</label>
+                                    <input type="text" class="form-control" id="exampleInputEmail1" name="building_singl" style="font-size: medium;">
+                                </div>
                                 <div class="form-group">
                                     <label>Roal</label>
                                     <select name="status" class="form-control">
@@ -296,7 +432,30 @@ $lockers = $conn->query("SELECT * FROM `lockers`")->fetchAll();
                                     </select> 
                                 </div>
                                 <br>
-                                <button type="submit" name="add" class="btn btn-info">Add</button>
+                                <button type="submit" name="add_singl" class="btn btn-info">Add</button>
+    </div>
+
+      <div class="hiden_sing2">
+                                <div class="form-group">
+                                    <label>Number of Lockers</label>
+                                    <input type="number" class="form-control" id="numberHelp" name="number_locker" style="font-size: medium;">
+                                    <small id="numberHelp" class="form-text text-muted">The lcoker will start from <?=$last_locker?>.</small>
+
+                                </div>
+                                <div class="form-group">
+                                    <label>Building</label>
+                                    <input type="text" class="form-control" id="exampleInputEmail1" name="building" style="font-size: medium;">
+                                </div>
+                                <div class="form-group">
+                                    <label>Roal</label>
+                                    <select name="status_multi" class="form-control">
+                                        <option value="1" >Available</option>
+                                        <option value="2" >Reserved</option>
+                                    </select> 
+                                </div>
+                                <br>
+                                <button type="submit" name="add_multi" class="btn btn-info">Add</button>
+    </div>
                                 </form>
       </div>
       <div class="modal-footer text-center">
@@ -307,6 +466,26 @@ $lockers = $conn->query("SELECT * FROM `lockers`")->fetchAll();
 </div>
 
 
+<!-- Modal -->
+<div class="modal fade" id="ModalOps" tabindex="-1" role="dialog" aria-labelledby="ModalOps" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       Set all lockers available?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <a href="?ava=true" class="btn btn-primary" >Yes</a>
+      </div>
+    </div>
+  </div>
+</div>
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
@@ -342,7 +521,28 @@ $lockers = $conn->query("SELECT * FROM `lockers`")->fetchAll();
 
     <script src="js/demo/datatables-demo.js"></script>
 
+<script>
 
+
+  $(document).ready(function () {   
+    $( ".hiden_singl" ).hide();
+    $( ".hiden_sing2" ).hide();
+
+    $("#radio_1, #radio_2").change(function () {
+        if ($("#radio_1").is(":checked")) {
+          $( ".hiden_sing2" ).hide();
+             $('.hiden_singl').show();
+
+            
+        }
+        else if ($("#radio_2").is(":checked")) {
+          $( ".hiden_singl" ).hide();
+          $('.hiden_sing2').show();
+        }
+       
+    });        
+});
+</script>
 </body>
 
 </html>

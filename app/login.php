@@ -5,7 +5,7 @@
 include "inc/conf.php";
 $msg = "";
 if(isLoged()){
-    header("Location: index.html");
+    header("Location: index.php");
 }
 if(isset($_POST['submit'])){
 
@@ -19,7 +19,7 @@ if(isset($_POST['submit'])){
 
     }else{
 
-        $stm = $conn->prepare(" select * from students where username = '$username' ");
+        $stm = $conn->prepare(" select * from students where student_id = '$username' ");
         $stm->execute();
         $count = $stm->rowCount();
 
@@ -30,18 +30,18 @@ if(isset($_POST['submit'])){
             if($row['password'] === $password){
 
                 $_SESSION['user:id'] = $row['id'];
-                header("Location: index.html");
+                header("Location: index.php");
                 exit();
             }else{
                 $msg = '<div class="alert alert-danger" role="alert">
-                Username or passowrd is not correct.
+                Student ID or passowrd is not correct.
              </div>';
             }
 
         }else{
 
             $msg = '<div class="alert alert-danger" role="alert">
-            Username or passowrd is not correct.
+            Student ID or passowrd is not correct.
              </div>';
 
         }
@@ -56,7 +56,7 @@ if(isset($_POST['submit'])){
 <head>
 
 <meta charset="utf-8">
-<title>Qniko - Startup Agency HTML Template</title>
+<title>Locker System</title>
 <meta name="description" content="">
 <meta name="author" content="">
 <meta name="keywords" content="">
@@ -180,7 +180,7 @@ if(isset($_POST['submit'])){
 </div>
 <div class="page-breadcrumb">
 <ul>
-<li><a href="index.html">Home</a></li>
+<li><a href="index.php">Home</a></li>
 <li>Login</li>
 </ul>
 </div>
@@ -203,7 +203,7 @@ if(isset($_POST['submit'])){
 
 <div class="col-md-12">
 <div class="wepaint-input-group">
-<label for="cname">Username</label>
+<label for="cname">Student ID</label>
 <input type="text" name="cname" id="cname" class="wi-control">
 </div>
 </div>

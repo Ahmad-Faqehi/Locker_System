@@ -17,7 +17,7 @@ if(isset($_POST['submit'])){
     $executed = $stmt->execute();
     
     //Todo: Update the status of locker from availbe to peding
-    $stmt_update = $conn->prepare("UPDATE `lockers` SET `status`=2 WHERE id = $locker_id");
+    $stmt_update = $conn->prepare("UPDATE `lockers` SET `status`=2 WHERE locker_number = $locker_id");
     $executed_update = $stmt_update->execute();
 
     if($executed && $executed_update){
@@ -47,7 +47,7 @@ $lockers = $conn->query($sql)->fetchAll();
 <head>
 
 <meta charset="utf-8">
-<title>Qniko - Startup Agency HTML Template</title>
+<title>Locker System</title>
 <meta name="description" content="">
 <meta name="author" content="">
 <meta name="keywords" content="">
@@ -135,7 +135,7 @@ $lockers = $conn->query($sql)->fetchAll();
 
 <!-- <ul id="QnikoMenu" class="sm sm-simple qnikoMenu">
         <li>
-        <a href="index.html">Home</a>
+        <a href="index.php">Home</a>
         </li>
         <li><a href="#about">About</a></li>
         <li><a href="#FEATURES">Features</a></li>
@@ -183,7 +183,7 @@ $lockers = $conn->query($sql)->fetchAll();
 </div>
 <div class="page-breadcrumb">
 <ul>
-<li><a href="index.html">Home</a></li>
+<li><a href="index.php">Home</a></li>
 <li>Locker</li>
 </ul>
 </div>
@@ -207,9 +207,9 @@ $lockers = $conn->query($sql)->fetchAll();
 <?=$msg?>
 <?php if(!isLoged()): ?>
 <div class="alert alert-warning" role="alert">
-  You have be login to reserve locker
+  You have be login to use the system and reserve locker, to login click <a href="login.php" class="btn-link">here</a>
 </div>
-<?php endif ?>
+<?php else: ?>
 
 <?php if($has_req && !$new_req): ?>
 
@@ -237,17 +237,20 @@ You already has request for reasve locker. See you requstes <a href="request.php
 <div class="col-md-4">
 <div class="single-blogV2">
 <div class="sb-img">
-<a href="#" <?php if(!$isReserved): ?> data-toggle="modal" data-target="#exampleModal<?=$locker['id']?> <?php else: echo 'onclick="alert(\'Already Reserve\')'; endif ?>">
+<a href="#" <?php if(!$isReserved): ?> data-toggle="modal" data-target="#exampleModal<?=$locker['locker_number']?> <?php else: echo 'onclick="alert(\'Already Reserve\')'; endif ?>">
 <img class="<?=$class_img?>" src="../assets/img/lockers/locker.png" alt="">
 </a>
 </div>
 <div class="sb-text">
 <h3>
-    <a href="#" <?php if(!$isReserved): ?> data-toggle="modal" data-target="#exampleModal<?=$locker['id']?> <?php else: echo 'onclick="alert(\'Already Reserve\')'; endif ?>">
-        Locker Number: <?=$locker['id']?>
+<div class="row">
+<a href="#" <?php if(!$isReserved): ?> data-toggle="modal" data-target="#exampleModal<?=$locker['locker_number']?> <?php else: echo 'onclick="alert(\'Already Reserve\')'; endif ?>">
+        Locker Number: <?=$locker['locker_number']?> <br>
+        Building: <?=$locker['building']?>  
     </a>
+</div>
     <div class=" pt-1 stext-btn aos-init aos-animate text-center" >
-    <a  href="#"  class="<?=$class_link?> text-white" <?php if(!$isReserved): ?> data-toggle="modal" data-target="#exampleModal<?=$locker['id']?> <?php else: echo 'onclick="alert(\'Already Reserve\')'; endif ?>">Reserve</a>
+    <a  href="#"  class="<?=$class_link?> text-white" <?php if(!$isReserved): ?> data-toggle="modal" data-target="#exampleModal<?=$locker['locker_number']?> <?php else: echo 'onclick="alert(\'Already Reserve\')'; endif ?>">Reserve</a>
     </div>
 </h3>
 </div>
@@ -258,7 +261,7 @@ You already has request for reasve locker. See you requstes <a href="request.php
 <?php endif ?>
 
 </div>
-
+<?php endif ?>
 </div>
 </div>
 </section>
@@ -274,7 +277,7 @@ $sql = "SELECT * FROM `students` where id = $user_id";
 $user = $conn->query($sql)->fetch();
 
  foreach($lockers as $locker): 
-   $locker_id = $locker['id'];
+   $locker_id = $locker['locker_number'];
 ?>
 <div class="modal fade" id="exampleModal<?=$locker_id?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -294,11 +297,15 @@ $user = $conn->query($sql)->fetch();
   </div>
   <div class="form-group">
     <label for="exampleInputPassword1">Your Phone Number</label>
-    <input type="number" class="form-control" id="exampleInputPassword1" style="font-size: medium;" value="<?=$user['phone_number']?>" readonly >
+    <input type="text" class="form-control" id="exampleInputPassword1" style="font-size: medium;" value="<?=$user['phone_number']?>" readonly >
   </div>
   <div class="form-group">
     <label for="exampleInputPassword1">Locker Number</label>
-    <input type="number" class="form-control" name="locker_id" style="font-size: medium;" value="<?=$locker_id ?>" readonly >
+    <input type="text" class="form-control" name="locker_id" style="font-size: medium;" value="<?=$locker_id ?>" readonly >
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Building</label>
+    <input type="text" class="form-control" name="Building" style="font-size: medium;" value="<?=$locker['building']?>" readonly >
   </div>
 
       </div>

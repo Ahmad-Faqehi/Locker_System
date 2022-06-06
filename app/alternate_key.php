@@ -1,51 +1,57 @@
-<?php include "inc/conf.php";
+<?php 
+include "inc/conf.php";
 
-if (isLoged()){
+if(!isLoged()){
     header("Location: index.php");
-    exit();
+    die();
 }
+
+$userid = $_SESSION['user:id'];
+$sql = "SELECT * FROM booking INNER JOIN students ON booking.student_id = students.id WHERE students.id = $userid";
+$lockers = $conn->query($sql)->fetch();
+$booking_id = $conn->query("SELECT booking.id FROM booking INNER JOIN students ON booking.student_id = students.id WHERE students.id = $userid")->fetch();
+$booking_id = $booking_id['id'];
+
+$has_req = true;
 $msg = "";
+// print_r($lockers);
+// die();
+if(empty($lockers)){
+
+    $msg = '<div class="alert alert-danger" role="alert">
+    Your do not have request yet !!. to make order click <a href="locker.php" class="btn-link">here</a>
+  </div>';
+  $has_req = false;
+}
+
+if($lockers['alternate_key'] == 2){
+
+  $emp_id = $lockers['employee_alternate'];
+//   if($emp_id):
+    $employee_sql = "SELECT * FROM `administrative` WHERE id = $emp_id"; 
+    $employee = $conn->query($employee_sql)->fetch();
+//   endif;
+}
 
 if(isset($_POST['submit'])){
+  $bookingid = $_POST['bookingid'];
 
-    $fname = $_POST['fname'];
-    $re_password = $_POST['Re_password'];
-    $password = $_POST['password'];
-    $username = $_POST['cname'];
-    $phone_number = $_POST['number'];
+  $filename = $_FILES["uploadfile"]["name"];
+  $tempname = $_FILES["uploadfile"]["tmp_name"];
+  $folder = "uploads/".$filename;
 
-    if (empty($fname) || empty($re_password) || empty($password) || empty($username) || empty($phone_number)){
-        $msg = '<div class="alert alert-danger" role="alert">
-        All the fileds must be enter it.
-       </div>';
-    }else{
+  if(move_uploaded_file($tempname,$folder)){
+    $sql = "UPDATE `booking` SET `attachment`='$folder', alternate_key = 1 WHERE id = '$booking_id'";
+    $stmt= $conn->prepare($sql);
+    $executed = $stmt->execute();
+    $msg = '<div class="alert alert-success" role="alert">
+    Your request done successfuly.</a>
+  </div>';
+  }
 
-    
-    $num_user = $conn->query("select count(*) from  students where student_id = '$username' ")->fetchColumn();
 
-    if($password !== $re_password){
-        $msg = '<div class="alert alert-danger" role="alert">
-                 Password is not match
-                </div>';
-    }elseif($num_user != 0){
-
-        $msg = '<div class="alert alert-danger" role="alert">
-        Student ID is already used
-     </div>';
-
-    }else{
-        $stmt = $conn->prepare("INSERT INTO `students`(`name`, `phone_number`, `student_id`, `password`) VALUES ('$fname','$phone_number','$username','$password')");
-        $executed = $stmt->execute();
-        $lastID = $conn->lastInsertId();
-        $msg = '<div class="alert alert-success" role="alert">
-                   You resisted successfully. To login click <a href="login.php" class="btn-link"> here </a>
-                </div>';
-                $_SESSION['user:id'] = $lastID;
-                header("Location: index.php");
-                exit();
-    }
 }
-}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -61,9 +67,12 @@ if(isset($_POST['submit'])){
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap" rel="stylesheet">
+
 <link rel="stylesheet" href="../assets/fonts/avenir/stylesheet.css">
 <link rel="stylesheet" href="../assets/fonts/circularSTD/stylesheet.css">
 <link rel="stylesheet" href="../assets/fonts/helvetica/stylesheet.css">
+<link rel="stylesheet" href="../assets/fonts/gilroy/stylesheet.css">
 
 
 <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
@@ -101,20 +110,16 @@ if(isset($_POST['submit'])){
 <link rel="shortcut icon" type="image/png" href="../assets/img/favicon.ico">
 
 <style>
-.btn-style-b {
-    position: relative;
-    font-size: 17px;
-    letter-spacing: 0px;
-    line-height: 25px;
-    color: #fff;
-    background-color: #00c3ff;
-    padding: 15px 30px;
-    border-radius: 30px;
-    font-weight: 400;
-    display: inline-block;
+
+    a.disabled {
+  pointer-events: none;
+  cursor: default;
+  
+}
+.blackwite{
+    filter: grayscale(1);
 }
 </style>
-
 <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -142,13 +147,11 @@ if(isset($_POST['submit'])){
 
 </nav>
 </div>
-<?php if(!isLoged()): ?>
 <div class="col-md-4">
 <div class="qnRight">
-<a href="login.php" class="btn-style-a">Login</a>
+<a href="logout.php" class="btn-style-a">Logout</a>
 </div>
 </div>
-<?php endif ?>
 </div>
 </div>
 </header>
@@ -160,7 +163,7 @@ if(isset($_POST['submit'])){
 <ul>
 <li><img src="../assets/img/graphic/set-a/g-1.png" alt=""></li>
 <li><img src="../assets/img/graphic/set-a/g-2.png" alt=""></li>
- <li><img src="../assets/img/graphic/set-a/g-3.png" alt=""></li>
+<li><img src="../assets/img/graphic/set-a/g-3.png" alt=""></li>
 <li><img src="../assets/img/graphic/set-a/g-4.png" alt=""></li>
 <li><img src="../assets/img/graphic/set-a/g-5.png" alt=""></li>
 <li><img src="../assets/img/graphic/set-a/g-6.png" alt=""></li>
@@ -178,12 +181,12 @@ if(isset($_POST['submit'])){
 <div class="row">
 <div class="col-md-12">
 <div class="innerpage-title">
-<h3>Singup</h3>
+<h3>Alternate Key</h3>
 </div>
 <div class="page-breadcrumb">
 <ul>
 <li><a href="index.php">Home</a></li>
-<li>Singup</li>
+<li>Alternate Key</li>
 </ul>
 </div>
 </div>
@@ -192,56 +195,86 @@ if(isset($_POST['submit'])){
 </section>
 
 
-<section class="checkout-wrapper-area">
+<section class="blog-wrapper-area">
+<div class="blog-boxV1">
 <div class="container">
 <div class="row">
 <div class="col-md-12">
-<div class="checkout-form">
-    <?=$msg?>
-<form method="POST" action="">
+<div class="section-titleV1">
+<p>Alternate Key</p>
+<h3>Your Alternate Key</h3>
+</div>
+</div>
+</div>
+<?=$msg?>
+
 
 <div class="row">
 
+<?php if($has_req):
+    
+    if($lockers['alternate_key'] == 2){
+        $lable = "Approved";
+        $class = "text-success";
+    }else{
+        $lable = "Pending";
+        $class = "text-secondary";
+    }
+    ?>
+    
+    <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Order Number</th>
+      <th scope="col">Locker Number</th>
+      <th scope="col">Alternate Key Status</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><?=$booking_id?></td>
+      <td><?=$lockers['locker_id']?></td>
+      <td class="<?=$class?>"><?=$lable?></td>
+    </tr>
+  </tbody>
+</table>
+<?php endif; 
+if ($has_req):
+if($lockers['alternate_key'] == "2")?>
 
+<div class="row">
 <div class="col-md-12">
-<div class="wepaint-input-group">
-<label for="cname">Full Name</label>
-<input type="text" name="fname" id="cname" class="wi-control" require>
+<div class="product-info-tab" style="padding: 14px 0px;">
+<nav>
+<div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+<a class="nav-item nav-link active show" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true"> <?=$lockers['alternate_key']?> Employee Details</a>
+</div>
+</nav>
+<div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
+<div class="tab-pane fade active show" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+
+<p>
+  The employee who accept your request for Alternate Key is: 
+  <br>
+  <br>
+  Name: <b><?=$employee['name']?></b> <br>
+  Phone Number: <a href="tel:<?=$employee['phone_number']?>"> <b><?=$employee['phone_number']?></b> </a>
+</p>
+
 </div>
 </div>
-<div class="col-md-12">
-<div class="wepaint-input-group">
-<label for="cname">Phone Number</label>
-<input type="number" name="number" id="cname" class="wi-control" require>
 </div>
-</div>
-<div class="col-md-12">
-<div class="wepaint-input-group">
-<label for="cname">Student ID</label>
-<input type="text" name="cname" id="cname" class="wi-control" require>
 </div>
 </div>
 
-<div class="col-md-12">
-<div class="wepaint-input-group">
-<label for="cntryname">Password</label>
-<input type="password" name="password" id="cntryname" class="wi-control" require>
-</div>
-</div>
-<div class="col-md-12">
-<div class="wepaint-input-group">
-<label for="cntryname">Re-Password</label>
-<input type="password" name="Re_password" id="cntryname" class="wi-control" require>
-</div>
-</div>
+<?php endif ?>
+<?php //endif ?>
 
 </div>
 
-<input type="submit" name="submit" value="Singup" style="font-size: large;" class="btn btn-primary">
 
-</form>
-</div>
-</div>
+
 </div>
 </div>
 </section>
@@ -297,6 +330,7 @@ if(isset($_POST['submit'])){
 <script src="../assets/js/jquery.scrollUp.js"></script>
 <script src="../assets/js/jquery.waypoints.min.js"></script>
 <script src="../assets/js/jquery.fancybox.min.js"></script>
+<script src="../assets/js/shuffle.min.js"></script>
 <script src="../assets/js/wow.min.js"></script>
 
 <script src="../assets/js/jquery.flipping_gallery.js"></script>
