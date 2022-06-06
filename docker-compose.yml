@@ -10,7 +10,7 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: locker
+      MYSQL_DATABASE: lockers
       MYSQL_USER: ahmad
       MYSQL_PASSWORD: password
     ports:

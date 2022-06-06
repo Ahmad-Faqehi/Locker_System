@@ -1,11 +1,16 @@
-<?php
-session_start();
+<?php session_start();
 
-
-$db_host = "localhost";
+// *** THIS CONECTION WHEN USING DOCKER COMPOSE *** //
+$db_host = "database";
 $db_user = "root";
-$db_pass = "";
+$db_pass = "password";
 $db_database = "lockers";
+
+// *** THIS CONECTION WHEN USING LOCAL SERVER *** //
+// $db_host = "localhost";
+// $db_user = "root";
+// $db_pass = "";
+// $db_database = "lockers";
 
 
 $conn = new PDO('mysql:host='.$db_host.';dbname='.$db_database .';charset=utf8mb4', ''.$db_user .'', ''.$db_pass .'', [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC]);
