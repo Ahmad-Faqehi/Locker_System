@@ -24,7 +24,7 @@
 # Deploy Application with Docker 🐬
 ### 1. Clone the repo
 
-Before clone project make sure you already has docker and docker-compose.
+Before clone project make sure you already have docker and docker-compose.
 <br>Clone the `Locker_System` locally:
 
 ``` shell script
