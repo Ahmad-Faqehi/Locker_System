@@ -24,10 +24,19 @@ spec:
         - name: dbhost
           value: "dbsvc"
         - name: dbuser
-          value: "root"
+          valueFrom:
+            configMapKeyRef:
+              name: sqlinit
+              key: MYSQL_USER
         - name: dbpass
-          value: "password"
+          valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: MYSQL_PASSWORD
         - name: dbname
-          value: "lockers"
+          valueFrom:
+            configMapKeyRef:
+              name: sqlinit
+              key: MYSQL_DATABASE
         ports:
         - containerPort: 80
