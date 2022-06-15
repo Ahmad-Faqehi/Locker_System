@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: appdeployemnt
+  name: appdeployemnt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: appdeployemnt
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: appdeployemnt
+    spec:
+      containers:
+      - image: locker-app:1.1
+        name: locker-app
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: dbhost
+          value: "dbsvc"
+        - name: dbuser
+          value: "root"
+        - name: dbpass
+          value: "password"
+        - name: dbname
+          value: "lockers"
+        ports:
+        - containerPort: 80

@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: dbdeployemnt
+  name: dbdeployemnt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dbdeployemnt
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: dbdeployemnt
+    spec:
+      containers:
+      - image: mysql:5.7
+        name: database
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "password"
+        - name: MYSQL_DATABASE
+          value: "lockers"
+        - name: MYSQL_USER
+          value: "ahmad"
+        - name: MYSQL_PASSWORD
+          value: "password"
+
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+          - name: sqlinit
+            mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: sqlinit
+          configMap:
+            name: sqlinit
