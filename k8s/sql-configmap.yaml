@@ -4,6 +4,8 @@ metadata:
   creationTimestamp: null
   name: sqlinit
 data:
+  MYSQL_DATABASE: lockers
+  MYSQL_USER: ahmad
   mysql-init.sql: |-
     -- phpMyAdmin SQL Dump
     -- version 4.8.4

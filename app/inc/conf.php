@@ -1,10 +1,10 @@
 <?php session_start();
 
 // *** THIS CONECTION WHEN USING DOCKER COMPOSE *** //
-$db_host = "database";
-$db_user = "root";
-$db_pass = "password";
-$db_database = "lockers";
+$db_host = $_ENV['dbhost'];
+$db_user = $_ENV['dbuser'];
+$db_pass = $_ENV['dbpass'];
+$db_database = $_ENV['dbname'];
 
 // *** THIS CONECTION WHEN USING LOCAL SERVER *** //
 // $db_host = "localhost";

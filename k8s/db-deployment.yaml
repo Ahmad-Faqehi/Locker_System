@@ -22,13 +22,25 @@ spec:
         name: database
         env:
         - name: MYSQL_ROOT_PASSWORD
-          value: "password"
-        - name: MYSQL_DATABASE
-          value: "lockers"
-        - name: MYSQL_USER
-          value: "ahmad"
+          valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: mysql-root-password
         - name: MYSQL_PASSWORD
-          value: "password"
+          valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: MYSQL_PASSWORD
+        - name: MYSQL_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: sqlinit
+              key: MYSQL_DATABASE
+        - name: MYSQL_USER
+          valueFrom:
+            configMapKeyRef:
+              name: sqlinit
+              key: MYSQL_USER
 
         ports:
         - containerPort: 3306

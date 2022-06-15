@@ -36,7 +36,6 @@ services:
       - database
     volumes:
       - .:/var/www/html/:delegated
-#      - ./php_config.ini:/usr/local/etc/php/php_no_errors.ini
     ports:
       - "8000:80"
     stdin_open: true
