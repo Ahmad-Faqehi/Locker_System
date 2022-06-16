@@ -17,7 +17,7 @@ spec:
         app: appdeployemnt
     spec:
       containers:
-      - image: locker-app:1.1
+      - image: locker-app:1.2
         name: locker-app
         imagePullPolicy: IfNotPresent
         env:

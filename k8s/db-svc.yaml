@@ -6,13 +6,14 @@ metadata:
     app: dbsvc
   name: dbsvc
 spec:
-  type: NodePort
+  # type: NodePort
   selector:
     app: dbdeployemnt
   ports:
-  - name: targetport
-    port: 3306
-    protocol: TCP
-    targetPort: 3306
-    nodePort: 30006
+  - port: 3306
+  clusterIP: None
+  # - name: targetport
+  #   protocol: TCP
+  #   targetPort: 3306
+  #   nodePort: 30006
 
