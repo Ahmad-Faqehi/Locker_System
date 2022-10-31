@@ -38,5 +38,10 @@ services:
       - .:/var/www/html/:delegated
     ports:
       - "8000:80"
+    environment:
+      dbhost: database
+      dbuser: root 
+      dbpass: password 
+      dbname: lockers
     stdin_open: true
     tty: true

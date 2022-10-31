@@ -23,6 +23,7 @@ spec:
         env:
         - name: dbhost
           value: "dbsvc"
+          
         - name: dbuser
           valueFrom:
             configMapKeyRef:
